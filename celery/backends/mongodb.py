@@ -125,7 +125,8 @@ class MongoBackend(BaseBackend):
             if url == 'mongodb://':
                 url = url + 'localhost'
             if detect_environment() != 'default':
-                self.options['use_greenlets'] = True
+                if pymongo.version_tuple < (3, ):
+                    self.options['use_greenlets'] = True
             self._connection = MongoClient(host=url, **self.options)
 
         return self._connection
